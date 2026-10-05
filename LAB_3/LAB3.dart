@@ -28,7 +28,10 @@ final int bigOrderLimit = 450 + 20 * t;
 final int balanceCap = 600 + 20 * t;
 final int couponPercent = 5 + t + u;
 // ===========================================================================
-
+class Dish {
+  late String name;
+  late int price;
+}
 void main() {
   print('Seed: $seed (t=$t, u=$u)');
   step1();
@@ -45,6 +48,24 @@ void main() {
 
 void step1() {
   print('--- Step 1 ---');
+
+  // Task 1.2: item1
+  var item1 = Dish();
+  item1.name = menu[u];
+  item1.price = priceOf(u);
+
+  // Task 1.2: item2
+  var item2 = Dish();
+  final int index2 = (u + 1) % 10;
+  item2.name = menu[index2];
+  item2.price = priceOf(index2);
+
+  // Apply discount
+  item2.price = item2.price - u;
+
+  // Output formatting
+  print('Step 1: ${item1.name} Rs ${item1.price}');
+  print('Step 1: ${item2.name} Rs ${item2.price}');
 }
 
 void step2() {
