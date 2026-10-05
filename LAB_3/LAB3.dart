@@ -396,5 +396,5 @@ void step10() {
 //Q3. What is the difference between assigning a field in a constructor body and assigning it in an initializer list? 
 //ANSWER: Assigning a field in a constructor body allows you to perform additional logic or validation before assigning the value, while assigning it in an initializer list is done before the constructor body executes and is typically used for final fields or when you want to ensure that the field is initialized before any other code runs in the constructor body.
 //Q4. Give one reason to use a getter instead of storing the value in a field, and one reason to use a setter instead of a public field. 
-//ANSWER: A getter can be used to compute a value on-the-fly based on other fields or logic, rather than storing it in a field, which can save memory and ensure the value is always up-to-date.
+//ANSWER: A getter cans be used to compute a value on-the-fly based on other fields or logic, rather than storing it in a field, which can save memory and ensure the value is always up-to-date.
 //A setter can be used to enforce validation or constraints on the value being assigned, preventing invalid states and encapsulating the logic for maintaining the integrity of the object's state.s
