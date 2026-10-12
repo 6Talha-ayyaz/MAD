@@ -12,3 +12,12 @@
  `describe()` on an instance via a `LibraryItem` reference (or if `describe()` is called), 
  dynamic dispatch executes `LibraryItem.describe()`, returning only 
  "$title ($year)" without the subclass details (pages or issue).
+
+
+
+ Answer to Think question PART(3):
+ Instantiating an abstract class (`LibraryItem('x', 2000)`) causes a compile error:
+ "Abstract classes can't be instantiated." 
+ An abstract class represents an incomplete contract (e.g., `lateFee` has no body/implementation).
+ Allowing direct instantiation would result in undefined behavior or runtime crashes 
+ if an unimplemented method were invoked on that instance.

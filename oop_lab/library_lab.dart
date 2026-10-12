@@ -45,13 +45,17 @@ void main() {
   step10();
 }
 // Task 1.1: Base class
-class LibraryItem {
+abstract class LibraryItem {
   final String title;
   final int year;
 
-String describe() => '$title ($year)';
   LibraryItem(this.title, this.year);
+
+  String describe() => '$title ($year)';
+
+  int lateFee(int days);
 }
+
 class Book extends LibraryItem {
   final int pages;
 
@@ -59,6 +63,9 @@ class Book extends LibraryItem {
 
   @override
   String describe() => '${super.describe()},$pages pages';
+
+  @override
+  int lateFee(int days) => days * feePerDay;
 }
 Book mainBook() {
   return Book(titles[u], yearOf(u), 100 + 3 * seed);
@@ -71,10 +78,30 @@ class Magazine extends LibraryItem {
 
   @override
   String describe() => '${super.describe()}, issue$issue';
+
+  @override
+  int lateFee(int days) => days * (feePerDay ~/ 2);
 }
+class Dvd extends LibraryItem {
+  final int minutes;
+
+  Dvd(super.title, super.year, this.minutes);
+
+  @override
+  String describe() => '${super.describe()},$minutes min';
+
+  @override
+  int lateFee(int days) => days * feePerDay * 2;
+}
+
 Magazine mainMagazine() {
   final int i = (u + 1) % 10;
   return Magazine(titles[i], yearOf(i), 1 + (t + u) % 12);
+}
+
+Dvd mainDvd() {
+  final int i = (u + 2) % 10;
+  return Dvd(titles[i], yearOf(i), 90 + seed % 40);
 }
 void step1() {
   print('--- Step 1 ---');
@@ -95,6 +122,13 @@ void step2() {
 
 void step3() {
   print('--- Step 3 ---');
+  final book = mainBook();
+  final mag = mainMagazine();
+  final dvd = mainDvd();
+
+  print('Step 3: Book late fee for $daysLate days =${book.lateFee(daysLate)}');
+  print('Step 3: Magazine late fee for $daysLate days =${mag.lateFee(daysLate)}');
+  print('Step 3: Dvd late fee for $daysLate days =${dvd.lateFee(daysLate)}');
 }
 
 void step4() {
