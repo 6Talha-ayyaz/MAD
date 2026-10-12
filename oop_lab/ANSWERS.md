@@ -3,3 +3,12 @@
  Dart enforces static type safety at compile time based on the reference type, 
  and `LibraryItem` does not declare a `pages` field. Even though the object 
  on the heap is a `Book`, the compiler only permits access to members known to `LibraryItem`.
+
+
+
+ Answer to Think question PART(2):
+ If you omit `@override` and mistype the name as `descibe()`, the compiler 
+ treats it as a brand-new method rather than an override. When calling 
+ `describe()` on an instance via a `LibraryItem` reference (or if `describe()` is called), 
+ dynamic dispatch executes `LibraryItem.describe()`, returning only 
+ "$title ($year)" without the subclass details (pages or issue).

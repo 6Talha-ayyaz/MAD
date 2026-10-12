@@ -18,3 +18,22 @@ Step 1: runtimeType = Book
 
 
 PART(2) OUTPUT:
+
+
+PS E:\MAD\MAD\oop_lab> dart run --enable-asserts library_lab.dart
+Seed: 5 (t=0, u=5)
+--- Step 1 ---
+Step 1: Clean Code (2005),115 pages
+Step 1: stored as LibraryItem: Clean Code
+Step 1: runtimeType = Book
+--- Step 2 ---
+Step 2: Clean Code (2005),115 pages
+Step 2: Algorithms Unlocked (2007), issue6
+--- Step 3 ---
+--- Step 4 ---
+--- Step 5 ---
+--- Step 6 ---
+--- Step 7 ---
+--- Step 8 ---
+--- Step 9 ---
+--- Step 10 ---
