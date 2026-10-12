@@ -120,6 +120,7 @@ class Book extends LibraryItem with Renewable implements Borrowable {
   @override
   int lateFee(int days) => days * feePerDay;
 }
+
 Book mainBook() {
   return Book(titles[u], yearOf(u), 100 + 3 * seed);
 }
@@ -135,6 +136,7 @@ class Magazine extends LibraryItem {
   @override
   int lateFee(int days) => days * (feePerDay ~/ 2);
 }
+
 class Dvd extends LibraryItem with Renewable {
   final int minutes;
 
@@ -170,21 +172,18 @@ enum MemberType {
   int applyDiscount(int fee) => fee - (fee * discountPercent ~/ 100);
 }
 
-
 extension MoneyText on int {
   String get rs => 'Rs $this';
 }
 
 extension Initials on String {
-  String get initials =>
-      split(' ').map((w) => w.isNotEmpty ? w[0] : '').join();
+  String get initials => split(' ').map((w) => w.isNotEmpty ? w[0] : '').join();
 }
 
 extension ShelfMath on List<LibraryItem> {
   int totalLateFee(int days) =>
       fold(0, (sum, item) => sum + item.lateFee(days));
 }
-
 
 class Fine {
   final int amount;
@@ -198,7 +197,9 @@ class Fine {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Fine && runtimeType == other.runtimeType && amount == other.amount);
+      (other is Fine &&
+          runtimeType == other.runtimeType &&
+          amount == other.amount);
 
   @override
   int get hashCode => amount.hashCode;
@@ -206,7 +207,6 @@ class Fine {
   @override
   String toString() => 'Fine($amount)';
 }
-
 
 class Member {
   final String name;
@@ -222,13 +222,6 @@ class Member {
   }
 }
 
-
-
-
-
-
-
-
 void step1() {
   print('--- Step 1 ---');
   Book b = mainBook();
@@ -241,7 +234,7 @@ void step1() {
 
 void step2() {
   print('--- Step 2 ---');
-  
+
   print('Step 2: ${mainBook().describe()}');
   print('Step 2: ${mainMagazine().describe()}');
 }
@@ -253,7 +246,9 @@ void step3() {
   final dvd = mainDvd();
 
   print('Step 3: Book late fee for $daysLate days =${book.lateFee(daysLate)}');
-  print('Step 3: Magazine late fee for $daysLate days =${mag.lateFee(daysLate)}');
+  print(
+    'Step 3: Magazine late fee for $daysLate days =${mag.lateFee(daysLate)}',
+  );
   print('Step 3: Dvd late fee for $daysLate days =${dvd.lateFee(daysLate)}');
 }
 
@@ -270,7 +265,7 @@ void step4() {
   final List<LibraryItem> items = [book, mainMagazine(), mainDvd()];
   for (final item in items) {
     print('Step 4: ${item.runtimeType} borrowable? ${item is Borrowable}');
-}
+  }
 }
 
 void step5() {
@@ -315,7 +310,9 @@ void step7() {
 
   print('Step 7: ${discountedFee.rs}');
   print('Step 7: initials of "${titles[u]}" = ${titles[u].initials}');
-  print('Step 7: shelf fee for $daysLate days =${items.totalLateFee(daysLate).rs}');
+  print(
+    'Step 7: shelf fee for $daysLate days =${items.totalLateFee(daysLate).rs}',
+  );
 }
 
 void step8() {
@@ -333,13 +330,17 @@ void step8() {
 void step9() {
   print('--- Step 9 ---');
 
- LibraryItem.created = 0;
+  LibraryItem.created = 0;
   buildShelf();
   final shelf = buildShelf();
 
   print('Step 9: items created = ${LibraryItem.created}');
-  print('Step 9: capped fee = ${LibraryItem.capFee(shelf.first.lateFee(daysBig))} (cap$feeCap)');
-  print('Step 9: const copies identical? ${identical(const Fine(10), const Fine(10))}');
+  print(
+    'Step 9: capped fee = ${LibraryItem.capFee(shelf.first.lateFee(daysBig))} (cap$feeCap)',
+  );
+  print(
+    'Step 9: const copies identical? ${identical(const Fine(10), const Fine(10))}',
+  );
   print('Step 9: new copies identical? ${identical(Fine(10), Fine(10))}');
 }
 
@@ -357,14 +358,12 @@ void step10() {
   final int borrowableCount = shelf.whereType<Borrowable>().length;
   final int renewableCount = shelf.where((item) => item is Renewable).length;
 
-  print('Step 10: ${shelf.length} items, $borrowableCount borrowable, $renewableCount renewable');
+  print(
+    'Step 10: ${shelf.length} items, $borrowableCount borrowable, $renewableCount renewable',
+  );
   print('Step 10: ${member.name} (${member.type.name}) owes $total');
   print('Step 10: over the cap? ${total > Fine(feeCap)}');
-  
 }
-
-
-
 
 /*
 ======================================================================

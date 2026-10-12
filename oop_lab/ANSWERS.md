@@ -1,23 +1,24 @@
- Answer to Think question PART(1):
- `item.pages` causes a compile error because the static type of `item` is `LibraryItem`.
- Dart enforces static type safety at compile time based on the reference type, 
- and `LibraryItem` does not declare a `pages` field. Even though the object 
- on the heap is a `Book`, the compiler only permits access to members known to `LibraryItem`.
+# OOP Lab - Answers
 
+**Name:** Talha Ayyaz
+**Roll Number:** 04072313005  
 
+---
 
- Answer to Think question PART(2):
- If you omit `@override` and mistype the name as `descibe()`, the compiler 
- treats it as a brand-new method rather than an override. When calling 
- `describe()` on an instance via a `LibraryItem` reference (or if `describe()` is called), 
- dynamic dispatch executes `LibraryItem.describe()`, returning only 
- "$title ($year)" without the subclass details (pages or issue).
+### Q1. What can a subclass using extends use for free that a class using implements has to write itself?
+A subclass using `extends` automatically inherits concrete method implementations and state (instance variables) from the superclass for free. In contrast, a class using `implements` treats the target class as an interface only, inheriting zero implementation and requiring manual implementation of every member.
 
+---
 
+### Q2. Book and Dvd both use Renewable. When would you pick a mixin, and when an abstract parent class?
+Pick an abstract parent class when establishing a strict hierarchical "is-a" relationship that shares a core identity across all subclasses. Pick a mixin when sharing reusable behavior or state horizontally across unrelated or sibling classes without cluttering the primary inheritance tree.
 
- Answer to Think question PART(3):
- Instantiating an abstract class (`LibraryItem('x', 2000)`) causes a compile error:
- "Abstract classes can't be instantiated." 
- An abstract class represents an incomplete contract (e.g., `lateFee` has no body/implementation).
- Allowing direct instantiation would result in undefined behavior or runtime crashes 
- if an unimplemented method were invoked on that instance.
+---
+
+### Q3. Why must you override hashCode whenever you override ==?
+Hash-based collections such as `Set` and `Map` rely on `hashCode` to place objects into lookup buckets before invoking `==`. If two objects are considered equal by `==` but have different hash codes, they land in different buckets and the collection fails to recognize them as duplicates.
+
+---
+
+### Q4. An extension method on String and a subclass of String both add behaviour. Why does Dart let you write the first one but not the second?
+In Dart, `String` is a final core class that cannot be subclassed or extended to protect runtime invariants and compiler optimizations. Extension methods do not alter the class hierarchy or memory layout; they resolve statically at compile time as syntactical wrappers around existing instances.
