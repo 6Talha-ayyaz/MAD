@@ -67,11 +67,32 @@ abstract class LibraryItem {
   final String title;
   final int year;
 
-  LibraryItem(this.title, this.year);
+  static int created = 0;
+
+  LibraryItem(this.title, this.year) {
+    created++;
+  }
+
+  static int capFee(int fee) => fee > feeCap ? feeCap : fee;
 
   String describe() => '$title ($year)';
 
   int lateFee(int days);
+}
+
+List<LibraryItem> buildShelf() {
+  final List<LibraryItem> shelf = [];
+  for (int k = 0; k < shelfSize; k++) {
+    final int i = (u + k) % 10;
+    if (k % 3 == 0) {
+      shelf.add(Book(titles[i], yearOf(i), 100 + 3 * seed));
+    } else if (k % 3 == 1) {
+      shelf.add(Magazine(titles[i], yearOf(i), 1 + (t + k) % 12));
+    } else {
+      shelf.add(Dvd(titles[i], yearOf(i), 90 + seed % 40));
+    }
+  }
+  return shelf;
 }
 
 class Book extends LibraryItem with Renewable implements Borrowable {
@@ -299,6 +320,15 @@ void step8() {
 
 void step9() {
   print('--- Step 9 ---');
+
+ LibraryItem.created = 0;
+  buildShelf();
+  final shelf = buildShelf();
+
+  print('Step 9: items created = ${LibraryItem.created}');
+  print('Step 9: capped fee = ${LibraryItem.capFee(shelf.first.lateFee(daysBig))} (cap$feeCap)');
+  print('Step 9: const copies identical? ${identical(const Fine(10), const Fine(10))}');
+  print('Step 9: new copies identical? ${identical(Fine(10), Fine(10))}');
 }
 
 void step10() {
