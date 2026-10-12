@@ -334,3 +334,51 @@ void step9() {
 void step10() {
   print('--- Step 10 ---');
 }
+
+
+
+
+/*
+======================================================================
+  ANSWERS TO THINK QUESTIONS
+======================================================================
+
+Answer to Think question PART(1):
+`item.pages` causes a compile error because the static type of `item` is `LibraryItem`.
+Dart enforces static type safety at compile time based on the reference type, 
+and `LibraryItem` does not declare a `pages` field. Even though the object 
+on the heap is a `Book`, the compiler only permits access to members known to `LibraryItem`.
+
+Answer to Think question PART(2):
+If you omit `@override` and mistype the name as `descibe()`, the compiler 
+treats it as a brand-new method rather than an override. When calling 
+`describe()` on an instance via a `LibraryItem` reference (or if `describe()` is called), 
+dynamic dispatch executes `LibraryItem.describe()`, returning only 
+"$title ($year)" without the subclass details (pages or issue).
+
+Answer to Think question PART(3):
+Instantiating an abstract class (`LibraryItem('x', 2000)`) causes a compile error:
+"Abstract classes can't be instantiated." 
+An abstract class represents an incomplete contract (e.g., `lateFee` has no body/implementation).
+Allowing direct instantiation would result in undefined behavior or runtime crashes 
+if an unimplemented method were invoked on that instance.
+
+Answer to Think question PART(4):
+Using `extends Borrowable` would inherit concrete method implementations and state from a parent class. However, `Borrowable` has no implementation bodies to reuse, only abstract signatures. Furthermore, Dart allows single inheritance only—`Book` already extends `LibraryItem` and cannot extend a second class. Using `implements Borrowable` allows `Book` to fulfill the contract without altering its inheritance tree.
+
+Answer to Think question PART(5):
+Putting `renew` in `LibraryItem` would force `Magazine` to inherit renewal functionality it shouldn't have, violating the design requirements. A `mixin` allows horizontal code reuse—sharing concrete state and methods directly between specific sibling classes (`Book` and `Dvd`) without polluting the common base class `LibraryItem`.
+
+Answer to Think question PART(6):
+`MemberType.student` is safer than the string `'student'` because enums provide compile-time type safety. A mistyped string like `'studnet'` compiles without warning and fails silently or at runtime, whereas an invalid enum value triggers an immediate compile-time error. Enums also enable exhaustive checking in `switch` statements and prevent arbitrary, invalid values from being passed.
+
+Answer to Think question PART(7):
+Writing `72.rs` instead of `rs(72)` provides a fluent, object-oriented dot-syntax that improves readability and composability. It enables chaining directly on expressions (e.g., `calculateFee().rs`) without wrapping code in deeply nested function calls like `rs(calculateFee())`, while keeping discoverability high via IDE autocomplete on the `int` type.
+
+Answer to Think question PART(8):
+If `hashCode` is removed, the set size becomes `3` instead of `2`. Hash-based collections like `Set` and `Map` place objects into buckets based on their `hashCode` before checking `operator ==`. If `hashCode` is not overridden, each instance inherits `identityHashCode` from `Object`, which maps distinct memory allocations to different buckets; as a result, `==` is never even evaluated and equal objects fail to deduplicate.
+
+Answer to Think question PART(9):
+`LibraryItem.created` can be read without instantiating an object because `static` members belong to the class declaration itself rather than to individual instances on the heap. Dart allocates and initializes `static` members at the class level when the class is loaded, so they exist independently of object lifecycles.
+======================================================================
+*/
