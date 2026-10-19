@@ -58,17 +58,53 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Study Tracker: $course'),
       ),
-      body: const Center(
-        child: Text('Hello'),
+      body: StudentCard(
+        name: studentName,
+        roll: rollNo,
+        course: course,
       ),
     );
   }
 }
 
-// Question: What is the difference between what runApp receives and what MaterialApp receives as home?
-// Answer: runApp receives the root widget of the entire application (typically MaterialApp, which configures 
-// top-level app settings like themes, routing, and localization). MaterialApp's 'home' parameter receives 
-// the widget representing the default or initial screen (page layout) displayed when the app launches.
+class StudentCard extends StatelessWidget {
+  final String name;
+  final String roll;
+  final String course;
+
+  const StudentCard({
+    super.key,
+    required this.name,
+    required this.roll,
+    required this.course,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Name: $name', key: const Key('student-name')),
+            Text('Roll no: $roll', key: const Key('student-roll')),
+            Text('Course: $course', key: const Key('student-course')),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// THINK QUESTION (Step 2):
+// Why are the fields of a StatelessWidget final? What would the compiler say if you removed final?
+// Answer: StatelessWidget instances are immutable (their properties cannot change after construction). Marking fields as 'final' 
+// enforces this immutability, ensuring that widgets remain pure descriptions of configuration and allowing Flutter to optimize rendering.
+// If you removed 'final', the Dart compiler would throw a compile-time error: "The member 'name' can't be defined because it is not final..." 
+// (or similar errors stating that mutable fields are not allowed in immutable widget classes).
+// ---------------------------------------------------------------------------
 
 // ---- Provided for Step 7. It has a bug on purpose. Do not rename anything.
 class BuggyCounter extends StatefulWidget {
