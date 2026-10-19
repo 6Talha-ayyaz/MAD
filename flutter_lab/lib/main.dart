@@ -58,10 +58,32 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Study Tracker: $course'),
       ),
-      body: StudentCard(
-        name: studentName,
-        roll: rollNo,
-        course: course,
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            StudentCard(
+              name: studentName,
+              roll: rollNo,
+              course: course,
+            ),
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Start: $startCount', key: const Key('info-start')),
+                Text('Step: $stepSize', key: const Key('info-step')),
+                Text('Max: $maxCount', key: const Key('info-max')),
+              ],
+            ),
+            const SizedBox(height: 12),
+            GoalBanner(
+              count: startCount,
+              max: maxCount,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -97,13 +119,48 @@ class StudentCard extends StatelessWidget {
   }
 }
 
+class GoalBanner extends StatelessWidget {
+  final int count;
+  final int max;
+
+  const GoalBanner({
+    super.key,
+    required this.count,
+    required this.max,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final percent = count * 100 ~/ max;
+    return Text(
+      'Progress: $count of $max ($percent%)',
+      key: const Key('progress'),
+    );
+  }
+}
+
 // ---------------------------------------------------------------------------
-// THINK QUESTION (Step 2):
-// Why are the fields of a StatelessWidget final? What would the compiler say if you removed final?
+// THINK QUESTIONS (Steps 2, 3, & 4):
+//
+// 1. Step 2 Think Question: Why are the fields of a StatelessWidget final? What would the compiler say if you removed final?
 // Answer: StatelessWidget instances are immutable (their properties cannot change after construction). Marking fields as 'final' 
 // enforces this immutability, ensuring that widgets remain pure descriptions of configuration and allowing Flutter to optimize rendering.
-// If you removed 'final', the Dart compiler would throw a compile-time error: "The member 'name' can't be defined because it is not final..." 
-// (or similar errors stating that mutable fields are not allowed in immutable widget classes).
+// If you removed 'final', the Dart compiler would throw a compile-time error stating that mutable fields are not allowed in an immutable widget class.
+//
+// 2. Step 3 Think Question: Draw the widget tree of your screen on paper, from LabApp down to the three Text widgets. How many levels deep is the Text('Max: ..')?
+// Answer (Tree & Depth):
+// Level 0: LabApp
+// Level 1:   MaterialApp
+// Level 2:     HomePage (Scaffold -> body)
+// Level 3:       SingleChildScrollView
+// Level 4:         Column
+// Level 5 (Child 3): Row
+// Level 6:             Text('Max: $maxCount')  <-- The Text('Max: ..') widget is 6 levels deep from LabApp.
+//
+// 3. Step 4 Think Question: Why does GoalBanner not need setState? What would you have to do to make it show a new count?
+// Answer: GoalBanner is a StatelessWidget, which represents an immutable configuration. It does not manage internal state 
+// and simply renders whatever data (count and max) is passed down to it from its parent. To make it show a new count, its parent 
+// widget (or an ancestor holding the state) must rebuild and pass a new updated value into GoalBanner's count parameter.
 // ---------------------------------------------------------------------------
 
 // ---- Provided for Step 7. It has a bug on purpose. Do not rename anything.
