@@ -106,7 +106,7 @@ class HomePage extends StatelessWidget {
   }
 }
 
-// ---- Step 1: The Clock widget ----
+// ---- Step 1 & 2: The Clock widget ----
 class Clock extends StatefulWidget {
   const Clock({super.key});
 
@@ -117,10 +117,12 @@ class Clock extends StatefulWidget {
 class _ClockState extends State<Clock> {
   late Timer _timer;
   int _seconds = startSec;
+  int _builds = 0;
 
   @override
   void initState() {
     super.initState();
+    lifecycleLog.add('initState');
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() => _seconds += tick);
       if (_seconds >= stopAt) timer.cancel(); // stop at your limit
@@ -130,25 +132,46 @@ class _ClockState extends State<Clock> {
   @override
   void dispose() {
     _timer.cancel();
+    lifecycleLog.add('dispose');
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Text('Session: $_seconds s', key: const Key('clock'));
+    _builds++;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Session: $_seconds s', key: const Key('clock')),
+        Text('Builds: $_builds', key: const Key('builds')),
+      ],
+    );
   }
 }
 
 /* 
-  Think: Why do we start the Timer in initState and not inside build? 
-  What would happen to the speed of the clock if we started it in build?
-  
-  Answer: initState() is called exactly once when the widget is inserted into 
-  the widget tree. In contrast, build() is called frequently whenever the widget 
-  rebuilds (e.g., via setState() every second or parent state updates). If we started 
-  the Timer inside build(), every single tick/rebuild would spawn a brand-new periodic 
-  timer, causing multiple timers to run concurrently. This would lead to exponential 
-  speed-up of the clock increments and severe resource/memory leaks.
+  Think (Step 1):
+  Why do we start the Timer in initState and not inside build? What would happen 
+  to the speed of the clock if we started it in build?
+  Answer: initState() runs exactly once when the State object is inserted into 
+  the tree. build() runs repeatedly on every frame rebuild. If we started the timer 
+  inside build(), every single tick would call setState(), re-triggering build() 
+  and spawning a new timer instance each time. This creates an exponential cascade 
+  of timers running simultaneously, causing the clock to accelerate rapidly and 
+  leaking resources.
+
+  Think (Step 2):
+  1. Why does Builds go up by one per second and not by two?
+     Answer: Each timer callback triggers exactly one setState() call per second. 
+     Flutter batches the scheduled frame update and calls build() once per state change. 
+     Since nothing else marks the State dirty during that interval, build() executes 
+     exactly once per second.
+
+  2. What error would you see in the console if the widget left the screen and 
+     _timer.cancel() was missing from dispose?
+     Answer: The un-cancelled timer would continue firing in the background. On the next 
+     tick, invoking setState() on an unmounted State object throws:
+     "FlutterError (setState() called after dispose(): _ClockState#...)"
 */
 
 // ---- Provided: shows YOUR numbers. Keep it on the page. Do not rename.
