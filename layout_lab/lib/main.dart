@@ -103,11 +103,44 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 12),
             const InfoPanel(),
             const SizedBox(height: 12),
+            const SummaryRow(),
+            const SizedBox(height: 12),
             // Add each new widget BELOW the previous one, in the order the
             // steps tell you, with a SizedBox(height: 12) between widgets.
           ],
         ),
       ),
+    );
+  }
+}
+
+// ---- Step 7: SummaryRow fixed with Expanded ----
+class SummaryRow extends StatelessWidget {
+  const SummaryRow({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            'Part A: read the widget tree of the $course board from top to bottom.',
+            key: const Key('sum-a'),
+          ),
+        ),
+        Expanded(
+          child: Text(
+            'Part B: build each box from small widgets and never extend a built-in class.',
+            key: const Key('sum-b'),
+          ),
+        ),
+        Expanded(
+          child: Text(
+            'Part C: break the layout on purpose, then fix it with Expanded or Wrap.',
+            key: const Key('sum-c'),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -351,6 +384,18 @@ class Probe extends StatelessWidget {
      Since the main axis of a Column is vertical, its cross axis is horizontal. Therefore, 
      crossAxisAlignment governs alignment across the horizontal space (left, center, or right), 
      while mainAxisAlignment governs placement along the vertical space (top, center, bottom).
+
+  Think (Step 7):
+  Why does wrapping a Text in Expanded make it wrap its words? Use the idea 
+  "constraints go down, sizes go up" from slide 13.
+  Answer: Under the rule "constraints go down, sizes go up, parent sets position", an unconstrained 
+  Row passes unbounded horizontal constraints (maxWidth: double.infinity) to its direct children. 
+  Given infinite width, a Text widget chooses its intrinsic width on a single un-wrapped line, which 
+  quickly exceeds the screen boundaries and triggers an overflow error. Wrapping Text in Expanded 
+  causes the parent Row to calculate the remaining available screen width and pass a bounded, tight 
+  horizontal constraint down to the Expanded child. The Text widget receives this fixed width constraint 
+  from above, forcing its text layout engine to break and wrap words across multiple vertical lines 
+  to stay within the boundary.
 */
 
 // ---- Provided: shows YOUR numbers. Keep it on the page. Do not rename.
@@ -370,31 +415,6 @@ class SettingsCard extends StatelessWidget {
       'stamp: top $dotTop, right $dotRight, bottom $dotBottom, left $dotLeft',
       key: const Key('settings'),
       style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
-    );
-  }
-}
-
-// ---- Provided for Step 7. It overflows on purpose. Do not rename anything.
-class SummaryRow extends StatelessWidget {
-  const SummaryRow({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          'Part A: read the widget tree of the $course board from top to bottom.',
-          key: const Key('sum-a'),
-        ),
-        Text(
-          'Part B: build each box from small widgets and never extend a built-in class.',
-          key: const Key('sum-b'),
-        ),
-        Text(
-          'Part C: break the layout on purpose, then fix it with Expanded or Wrap.',
-          key: const Key('sum-c'),
-        ),
-      ],
     );
   }
 }
