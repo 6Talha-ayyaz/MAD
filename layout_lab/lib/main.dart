@@ -101,11 +101,46 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 12),
             const SwapBoard(),
             const SizedBox(height: 12),
+            const InfoPanel(),
+            const SizedBox(height: 12),
             // Add each new widget BELOW the previous one, in the order the
             // steps tell you, with a SizedBox(height: 12) between widgets.
           ],
         ),
       ),
+    );
+  }
+}
+
+// ---- Step 6: InfoPanel widget ----
+class InfoPanel extends StatelessWidget {
+  const InfoPanel({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          key: const Key('info-row'),
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text('Start: $startSec s', key: const Key('row-a')),
+            Text('Tick: $tick s', key: const Key('row-b')),
+            Text('Stop: $stopAt s', key: const Key('row-c')),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Column(
+          key: const Key('info-col'),
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Name: $studentName', key: const Key('col-a')),
+            Text('Roll no: $rollNo', key: const Key('col-b')),
+            Text('Course: $course', key: const Key('col-c')),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -306,6 +341,16 @@ class Probe extends StatelessWidget {
   However, the persistent State object holding the `taps` counter is attached directly to the 
   Element, not the widget. Because the leftmost Element stayed at index 0, its internal State 
   (the tapped counter) remained at the left position.
+
+  Think (Step 6):
+  1. In a Column, which axis is the main axis?
+     Answer: In a Column, the vertical axis is the main axis (running top-to-bottom).
+  2. Why does crossAxisAlignment: CrossAxisAlignment.center in a Column move the 
+     children left or right and not up or down?
+     Answer: Because the cross axis of any flex container is perpendicular to its main axis. 
+     Since the main axis of a Column is vertical, its cross axis is horizontal. Therefore, 
+     crossAxisAlignment governs alignment across the horizontal space (left, center, or right), 
+     while mainAxisAlignment governs placement along the vertical space (top, center, bottom).
 */
 
 // ---- Provided: shows YOUR numbers. Keep it on the page. Do not rename.
