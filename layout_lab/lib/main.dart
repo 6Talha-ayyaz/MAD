@@ -107,11 +107,33 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 12),
             const ShareRow(),
             const SizedBox(height: 12),
+            const InfoBox(),
+            const SizedBox(height: 12),
             // Add each new widget BELOW the previous one, in the order the
             // steps tell you, with a SizedBox(height: 12) between widgets.
           ],
         ),
       ),
+    );
+  }
+}
+
+// ---- Step 9: InfoBox widget ----
+class InfoBox extends StatelessWidget {
+  const InfoBox({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      key: const Key('info-box'),
+      margin: EdgeInsets.all(boxMargin),
+      padding: EdgeInsets.all(boxPad),
+      decoration: BoxDecoration(
+        color: swatches[hue]!.shade100,
+        borderRadius: BorderRadius.circular(boxRadius),
+        border: Border.all(width: boxBorder),
+      ),
+      child: Text('Course: $course', key: const Key('box-text')),
     );
   }
 }
@@ -445,6 +467,16 @@ class Probe extends StatelessWidget {
      its allocated fraction because Expanded forces its child to fit tightly (FlexFit.tight).
   2. Which one is "Flexible with fit: tight"?
      Answer: Expanded is literally a subclass/convenience wrapper for Flexible with `fit: FlexFit.tight`.
+
+  Think (Step 9):
+  1. Which one is inside the border, margin or padding?
+     Answer: Padding is inside the border (between the border and the child content). Margin 
+     is outside the border (spacing between the border and surrounding widgets).
+  2. When would you use a plain Padding or SizedBox instead of a Container?
+     Answer: A Container is a composite widget that wraps many low-level layout widgets. If you 
+     only need whitespace around a widget, use `Padding`. If you only need a fixed width, height, 
+     or empty spacing between flex items, use `SizedBox`. Using these specialized, single-purpose 
+     widgets has lighter overhead and allows `const` constructors for performance optimizations.
 */
 
 // ---- Provided: shows YOUR numbers. Keep it on the page. Do not rename.
