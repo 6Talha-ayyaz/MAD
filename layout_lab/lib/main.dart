@@ -95,13 +95,56 @@ class HomePage extends StatelessWidget {
           children: [
             const SettingsCard(),
             const SizedBox(height: 12),
+            const Welcome(),
+            const SizedBox(height: 12),
             const Clock(),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Tile(tileA),
+                Tile(tileB),
+                Tile(tileC),
+              ],
+            ),
             const SizedBox(height: 12),
             // Add each new widget BELOW the previous one, in the order the
             // steps tell you, with a SizedBox(height: 12) between widgets.
           ],
         ),
       ),
+    );
+  }
+}
+
+// ---- Step 4: Welcome widget ----
+class Welcome extends StatelessWidget {
+  const Welcome({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text('Welcome, $studentName', key: const Key('welcome')),
+    );
+  }
+}
+
+// ---- Step 4: Tile widget ----
+class Tile extends StatefulWidget {
+  final String label;
+  const Tile(this.label, {super.key});
+
+  @override
+  State<Tile> createState() => _TileState();
+}
+
+class _TileState extends State<Tile> {
+  int taps = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () => setState(() => taps++),
+      child: Text('${widget.label}: $taps'),
     );
   }
 }
@@ -214,6 +257,16 @@ class Probe extends StatelessWidget {
      Answer: The RenderObject resides in the Render Tree (created and managed by RenderObjectElements). 
      Its job is to perform actual layout measurement (computing constraints and sizes), painting pixels 
      onto the screen, and hit testing for pointer events.
+
+  Think (Step 4):
+  You built Tile out of an ElevatedButton without writing extends ElevatedButton. 
+  What is this style called, and why does Flutter prefer it?
+  Answer: This design pattern is called "Composition" (favoring object composition 
+  over class inheritance). Flutter prefers composition because:
+  1. It avoids brittle, deeply nested inheritance hierarchies.
+  2. It keeps widgets modular, loosely coupled, and reusable.
+  3. UI behavior and appearance can be assembled dynamically by nesting smaller, 
+     single-responsibility building blocks rather than overriding complex framework internals.
 */
 
 // ---- Provided: shows YOUR numbers. Keep it on the page. Do not rename.
