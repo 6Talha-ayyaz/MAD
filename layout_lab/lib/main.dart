@@ -95,6 +95,8 @@ class HomePage extends StatelessWidget {
           children: [
             const SettingsCard(),
             const SizedBox(height: 12),
+            const Clock(),
+            const SizedBox(height: 12),
             // Add each new widget BELOW the previous one, in the order the
             // steps tell you, with a SizedBox(height: 12) between widgets.
           ],
@@ -103,6 +105,51 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+
+// ---- Step 1: The Clock widget ----
+class Clock extends StatefulWidget {
+  const Clock({super.key});
+
+  @override
+  State<Clock> createState() => _ClockState();
+}
+
+class _ClockState extends State<Clock> {
+  late Timer _timer;
+  int _seconds = startSec;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() => _seconds += tick);
+      if (_seconds >= stopAt) timer.cancel(); // stop at your limit
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('Session: $_seconds s', key: const Key('clock'));
+  }
+}
+
+/* 
+  Think: Why do we start the Timer in initState and not inside build? 
+  What would happen to the speed of the clock if we started it in build?
+  
+  Answer: initState() is called exactly once when the widget is inserted into 
+  the widget tree. In contrast, build() is called frequently whenever the widget 
+  rebuilds (e.g., via setState() every second or parent state updates). If we started 
+  the Timer inside build(), every single tick/rebuild would spawn a brand-new periodic 
+  timer, causing multiple timers to run concurrently. This would lead to exponential 
+  speed-up of the clock increments and severe resource/memory leaks.
+*/
 
 // ---- Provided: shows YOUR numbers. Keep it on the page. Do not rename.
 class SettingsCard extends StatelessWidget {
