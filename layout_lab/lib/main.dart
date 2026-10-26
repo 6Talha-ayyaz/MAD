@@ -88,32 +88,61 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Team Board: $course')),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+      body: const SingleChildScrollView(
+        padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SettingsCard(),
-            const SizedBox(height: 12),
-            const Welcome(),
-            const SizedBox(height: 12),
-            const Clock(),
-            const SizedBox(height: 12),
-            const SwapBoard(),
-            const SizedBox(height: 12),
-            const InfoPanel(),
-            const SizedBox(height: 12),
-            const SummaryRow(),
-            const SizedBox(height: 12),
-            const ShareRow(),
-            const SizedBox(height: 12),
-            const InfoBox(),
-            const SizedBox(height: 12),
-            // Add each new widget BELOW the previous one, in the order the
-            // steps tell you, with a SizedBox(height: 12) between widgets.
+            SettingsCard(),
+            SizedBox(height: 12),
+            Welcome(),
+            SizedBox(height: 12),
+            Clock(),
+            SizedBox(height: 12),
+            SwapBoard(),
+            SizedBox(height: 12),
+            InfoPanel(),
+            SizedBox(height: 12),
+            SummaryRow(),
+            SizedBox(height: 12),
+            ShareRow(),
+            SizedBox(height: 12),
+            InfoBox(),
+            SizedBox(height: 12),
+            StampStack(),
           ],
         ),
       ),
+    );
+  }
+}
+
+// ---- Step 10: StampStack widget ----
+class StampStack extends StatelessWidget {
+  const StampStack({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      key: const Key('stack'),
+      children: [
+        Container(
+          key: const Key('layer-base'),
+          width: 300,
+          height: 120,
+          color: Colors.grey.shade300,
+        ),
+        Positioned(
+          top: dotTop,
+          right: dotRight,
+          child: const Icon(Icons.star, key: Key('dot-top')),
+        ),
+        Positioned(
+          bottom: dotBottom,
+          left: dotLeft,
+          child: const Icon(Icons.circle, key: Key('dot-bottom')),
+        ),
+      ],
     );
   }
 }
@@ -477,6 +506,16 @@ class Probe extends StatelessWidget {
      only need whitespace around a widget, use `Padding`. If you only need a fixed width, height, 
      or empty spacing between flex items, use `SizedBox`. Using these specialized, single-purpose 
      widgets has lighter overhead and allows `const` constructors for performance optimizations.
+
+  Think (Step 10):
+  1. What decides the size of the Stack?
+     Answer: The size of a Stack is determined by its non-positioned children (in this case, the 
+     base Container of 300x120). Positioned children are laid out within the bounds established 
+     by non-positioned children and do not contribute to the Stack's overall measured size.
+  2. What happens to the layout if the Icons come first and the grey Container last?
+     Answer: In a Stack, children are painted back-to-front in the order they appear in the list. 
+     If the Icons come first and the opaque grey Container comes last, the Container will be 
+     painted on top of the Icons, completely hiding them behind the grey background.
 */
 
 // ---- Provided: shows YOUR numbers. Keep it on the page. Do not rename.
