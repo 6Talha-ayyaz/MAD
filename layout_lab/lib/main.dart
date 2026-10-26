@@ -99,19 +99,46 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 12),
             const Clock(),
             const SizedBox(height: 12),
-            Row(
-              children: [
-                Tile(tileA),
-                Tile(tileB),
-                Tile(tileC),
-              ],
-            ),
+            const SwapBoard(),
             const SizedBox(height: 12),
             // Add each new widget BELOW the previous one, in the order the
             // steps tell you, with a SizedBox(height: 12) between widgets.
           ],
         ),
       ),
+    );
+  }
+}
+
+// ---- Step 5: SwapBoard widget ----
+class SwapBoard extends StatefulWidget {
+  const SwapBoard({super.key});
+
+  @override
+  State<SwapBoard> createState() => _SwapBoardState();
+}
+
+class _SwapBoardState extends State<SwapBoard> {
+  var tiles = [
+    Tile(tileA, key: ValueKey(tileA)),
+    Tile(tileB, key: ValueKey(tileB)),
+    Tile(tileC, key: ValueKey(tileC)),
+  ];
+
+  void swap() => setState(() => tiles = tiles.reversed.toList());
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(children: tiles),
+        ElevatedButton(
+          key: const Key('swap'),
+          onPressed: swap,
+          child: const Text('Swap'),
+        ),
+      ],
     );
   }
 }
@@ -267,6 +294,18 @@ class Probe extends StatelessWidget {
   2. It keeps widgets modular, loosely coupled, and reusable.
   3. UI behavior and appearance can be assembled dynamically by nesting smaller, 
      single-responsibility building blocks rather than overriding complex framework internals.
+
+  Think (Step 5):
+  Without keys, why did the number stay at the left even though the label moved? 
+  Use the words widget, Element and State in your answer.
+  Answer: Without keys, Flutter relies solely on the widget runtimeType and slot 
+  position in the children list when reconciling the tree. When the list was reversed, 
+  the leftmost Element inspected the new widget at index 0 (which was formerly the rightmost 
+  Tile) and saw that its runtimeType matched `Tile`. Therefore, the existing Element was retained 
+  and updated with the new widget's `label` property (updating the name to the new widget's text). 
+  However, the persistent State object holding the `taps` counter is attached directly to the 
+  Element, not the widget. Because the leftmost Element stayed at index 0, its internal State 
+  (the tapped counter) remained at the left position.
 */
 
 // ---- Provided: shows YOUR numbers. Keep it on the page. Do not rename.
