@@ -105,11 +105,51 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 12),
             const SummaryRow(),
             const SizedBox(height: 12),
+            const ShareRow(),
+            const SizedBox(height: 12),
             // Add each new widget BELOW the previous one, in the order the
             // steps tell you, with a SizedBox(height: 12) between widgets.
           ],
         ),
       ),
+    );
+  }
+}
+
+// ---- Step 8: ShareRow widget ----
+class ShareRow extends StatelessWidget {
+  const ShareRow({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      key: const Key('share-row'),
+      children: [
+        SizedBox(
+          key: const Key('fixed'),
+          width: fixedW,
+          child: ElevatedButton(
+            onPressed: () {},
+            child: const Text('F'),
+          ),
+        ),
+        Expanded(
+          flex: flexA,
+          child: ElevatedButton(
+            key: const Key('exp'),
+            onPressed: () {},
+            child: const Text('Exp'),
+          ),
+        ),
+        Flexible(
+          flex: flexB,
+          child: ElevatedButton(
+            key: const Key('flex'),
+            onPressed: () {},
+            child: const Text('Flex'),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -396,6 +436,15 @@ class Probe extends StatelessWidget {
   horizontal constraint down to the Expanded child. The Text widget receives this fixed width constraint 
   from above, forcing its text layout engine to break and wrap words across multiple vertical lines 
   to stay within the boundary.
+
+  Think (Step 8):
+  1. What would change on the screen if you swapped Expanded and Flexible between the two buttons?
+     Answer: The 'Exp' button would shrink to its compact intrinsic width (because Flexible with 
+     FlexFit.loose allows its child to be smaller than the allocated space), leaving unused empty 
+     space in its allocated fraction. Meanwhile, the 'Flex' button would stretch to completely fill 
+     its allocated fraction because Expanded forces its child to fit tightly (FlexFit.tight).
+  2. Which one is "Flexible with fit: tight"?
+     Answer: Expanded is literally a subclass/convenience wrapper for Flexible with `fit: FlexFit.tight`.
 */
 
 // ---- Provided: shows YOUR numbers. Keep it on the page. Do not rename.
